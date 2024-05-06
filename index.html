@@ -5,9 +5,11 @@
     <title>紫薇通灵模拟器</title>
     <style>
         body {
-            background-color: #cebc8b;
-            font-family: '黑体', sans-serif;
-            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://pic.imgdb.cn/item/663885620ea9cb14033e4f6e.png');
+            background-repeat: repeat;
+            background-size: auto;
         }
         button {
             font-size: 24px;
@@ -49,7 +51,7 @@
         let divinationCost = 0;
         const attributes = [
             "敏捷:90-180", "信仰:90-180", "耐力:90-180", "‰ HP上限:18-36", "‰ 法术攻击:18-36",
-            "物理攻击:700-1300", "法术攻击:700-1300", "‰ 物理攻击:18-36", "恢复:900-1300",
+            "物理攻击:700-1300", "法术攻击:700-1300", "‰ 物理攻击:18-36", "恢复:900-1555",
             "法术暴击:200-500", "法术暴击抵抗:200-500", "法术闪避:200-500", "忽视法术闪避:200-500",
             "法术命中:200-500", "物理暴击:200-500", "物理暴击抵抗:200-500", "物理闪避:200-500",
             "忽视物理闪避:200-500", "物理命中:200-500"
@@ -58,7 +60,7 @@
         function getRandomResult() {
             const results = [];
             const counts = [1, 2, 3, 4, 5];
-            const probabilities = [0.25, 0.25, 0.20, 0.20, 0.10];
+            const probabilities = [0.3, 0.25, 0.2, 0.15, 0.10];
             const resultCount = counts[weightedRandom(probabilities)];
             for (let i = 0; i < resultCount; i++) {
                 const attr = attributes[Math.floor(Math.random() * attributes.length)];
