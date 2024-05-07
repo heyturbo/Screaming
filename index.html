@@ -116,7 +116,7 @@
                     specialMessageElement.innerHTML = '出货啦！';
                     if (attr === '敏捷' && countMap[attr].totalValue > 300 ||
                         (attr.includes('‰') && countMap[attr].totalValue > 59)) {
-                        if (confirm(`您确定要换掉吗？`)) {
+                        if (confirm(`您上一次已出大货，确认要换掉吗？（点击取消可返回上一次通灵结果）`)) {
                             performDivination();
                             return;
                         }
