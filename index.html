@@ -33,7 +33,7 @@
             font-weight: bold;
         }
         .special-message {
-            font-size: 36px;
+            font-size: 24px;
             font-style: italic;
             font-weight: bold;
             color: red;
@@ -53,8 +53,8 @@
         let divinationCount = 0;
         let divinationCost = 0;
         const attributes = [
-            "敏捷:90-180", "信仰:90-180", "耐力:90-180", "‰ HP上限:18-36", "‰ 法术攻击:18-36",
-            "物理攻击:700-1300", "法术攻击:700-1300", "‰ 物理攻击:18-36", "恢复:900-1555",
+            "敏捷:90-180", "信仰:90-180", "耐力:90-180", "‰HP上限:18-36", "‰法术攻击:18-36",
+            "物理攻击:700-1300", "法术攻击:700-1300", "‰物理攻击:18-36", "恢复:900-1555",
             "法术暴击:200-500", "法术暴击抵抗:200-500", "法术闪避:200-500", "忽视法术闪避:200-500",
             "法术命中:200-500", "物理暴击:200-500", "物理暴击抵抗:200-500", "物理闪避:200-500",
             "忽视物理闪避:200-500", "物理命中:200-500"
@@ -90,7 +90,7 @@
             resultElement.innerHTML = results.join('<br>');
 
             divinationCount++;
-            divinationCost = 6.5 * divinationCount;
+            divinationCost = 6.8 * divinationCount;
             document.getElementById('counter').innerHTML = `已通灵<span class="red-bold">${divinationCount}</span>次`;
             document.getElementById('cost').innerHTML = `您已消耗价值<span class="red-bold">${divinationCost.toFixed(2)}</span>元的紫薇教通灵`;
 
@@ -98,7 +98,7 @@
         }
 
         function checkSpecialMessage(results) {
-            const specialAttributes = ['敏捷', '‰ 物理攻击', '‰ 法术攻击', '‰ HP上限'];
+            const specialAttributes = ['敏捷', '‰物理攻击', '‰法术攻击', '‰HP上限'];
             const countMap = {};
             results.forEach(result => {
                 const attribute = result.split(' ')[1];
