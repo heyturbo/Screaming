@@ -65,7 +65,7 @@
         function getRandomResult() {
             const results = [];
             const counts = [1, 2, 3, 4, 5];
-            const probabilities = [0.3, 0.25, 0.2, 0.15, 0.10];
+            const probabilities = [0.1, 0.2, 0.3, 0.2, 0.2];
             const resultCount = counts[weightedRandom(probabilities)];
             for (let i = 0; i < resultCount; i++) {
                 const attr = attributes[Math.floor(Math.random() * attributes.length)];
