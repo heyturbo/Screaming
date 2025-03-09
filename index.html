@@ -18,7 +18,7 @@
             position: relative;
             width: 100vw;
             height: 100vh;
-            background-color: #f0f0f0;
+            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -63,19 +63,39 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background-color: #ff6b6b;
+            background: radial-gradient(circle, #ff8585 0%, #ff6b6b 70%, #ff5252 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 60px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, box-shadow 0.3s;
             user-select: none;
             z-index: 20;
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4), 
+                        0 2px 8px rgba(0, 0, 0, 0.2),
+                        inset 0 -2px 5px rgba(0, 0, 0, 0.1),
+                        inset 0 2px 5px rgba(255, 255, 255, 0.5);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
         }
         
         #mouthButton:active {
             transform: scale(0.95);
+            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3), 
+                        0 1px 4px rgba(0, 0, 0, 0.15),
+                        inset 0 -1px 3px rgba(0, 0, 0, 0.2),
+                        inset 0 1px 3px rgba(255, 255, 255, 0.3);
+        }
+        
+        #mouthButton::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 60%);
+            pointer-events: none;
         }
         
         /* 特效容器 */
@@ -93,19 +113,43 @@
         /* 压力计 */
         #pressureMeter {
             width: 80%;
-            height: 20px;
-            background-color: #ddd;
-            border-radius: 10px;
+            height: 24px;
+            background-color: rgba(221, 221, 221, 0.5);
+            border-radius: 12px;
             overflow: hidden;
             margin-top: 20px;
             position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 
+                        0 1px 2px rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(200, 200, 200, 0.8);
         }
         
         #pressureBar {
             height: 100%;
             width: 0%;
-            background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+            background: linear-gradient(to right, 
+                            #4facfe 0%, 
+                            #00f2fe 50%, 
+                            #ff9a8b 75%, 
+                            #ff6a88 87%, 
+                            #ff0844 100%);
+            background-size: 200% 100%;
             transition: width 0.1s;
+            box-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #pressureBar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, 
+                            rgba(255, 255, 255, 0.3) 0%, 
+                            rgba(255, 255, 255, 0) 100%);
         }
         
         #pressureValue {
@@ -117,28 +161,39 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 12px;
+            font-size: 14px;
+            font-weight: bold;
             color: #333;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+            z-index: 1;
         }
         
         /* 打卡面板 */
         #checkinPanel {
             width: 90%;
             max-height: 40%;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             padding: 15px;
             margin-top: 20px;
             overflow-y: auto;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1), 
+                        0 4px 12px rgba(0, 0, 0, 0.1);
             display: none;
             z-index: 30;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
         
         .checkinHeader {
             text-align: center;
             margin-bottom: 15px;
             font-weight: bold;
+            padding: 8px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            color: #333;
         }
         
         .checkinGrid {
@@ -150,15 +205,23 @@
         .checkinDay {
             padding: 5px;
             text-align: center;
-            border-radius: 5px;
+            border-radius: 8px;
             background-color: #f0f0f0;
             font-size: 14px;
             position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .checkinDay:not(.active):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
         .checkinDay.active {
-            background-color: #4facfe;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
+            box-shadow: 0 4px 8px rgba(79, 172, 254, 0.3);
         }
         
         .checkinValue {
@@ -166,31 +229,113 @@
             position: absolute;
             bottom: 2px;
             right: 2px;
+            padding: 1px 3px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 4px;
             color: #ff6b6b;
             font-weight: bold;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 统计数据容器 */
+        #statsContainer {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 5px;
+            border-radius: 10px;
+            background-color: rgba(240, 240, 240, 0.5);
+        }
+        
+        .statItem {
+            flex: 1;
+            text-align: center;
+            padding: 8px 5px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.7);
+            margin: 0 3px;
+        }
+        
+        .statLabel {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 3px;
+        }
+        
+        .statValue {
+            font-weight: bold;
+            color: #ff6a88;
+            font-size: 14px;
         }
         
         /* 控制按钮 */
         #controls {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 15px;
+            right: 15px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
             z-index: 40;
         }
         
         .controlButton {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15),
+                        inset 0 -2px 5px rgba(0, 0, 0, 0.05),
+                        inset 0 2px 5px rgba(255, 255, 255, 0.8);
             cursor: pointer;
-            font-size: 20px;
+            font-size: 22px;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        
+        .controlButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15),
+                        inset 0 -2px 5px rgba(0, 0, 0, 0.05),
+                        inset 0 2px 5px rgba(255, 255, 255, 0.8);
+        }
+        
+        .controlButton:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1),
+                        inset 0 -1px 3px rgba(0, 0, 0, 0.05),
+                        inset 0 1px 3px rgba(255, 255, 255, 0.8);
+        }
+        
+        /* 超级模式指示器 */
+        .superModeIndicator {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ff9a8b 0%, #ff0844 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(255, 8, 68, 0.5);
+            z-index: 30;
+            animation: pulseIndicator 1.5s infinite;
+        }
+        
+        @keyframes pulseIndicator {
+            0% {
+                transform: translateX(-50%) scale(1);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.05);
+            }
+            100% {
+                transform: translateX(-50%) scale(1);
+            }
         }
         
         /* 声波动画 */
@@ -219,13 +364,173 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 0, 0, 0.85);
             color: white;
             padding: 20px 30px;
-            border-radius: 10px;
+            border-radius: 15px;
             font-size: 18px;
             z-index: 50;
             display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+            animation: popupFade 0.3s ease-out;
+        }
+        
+        @keyframes popupFade {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+        
+        /* 成就系统样式 */
+        #achievementPopup {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, 0);
+            background: linear-gradient(135deg, #ff9a8b 0%, #ff6a88 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-size: 16px;
+            z-index: 51;
+            display: none;
+            box-shadow: 0 15px 35px rgba(255, 106, 136, 0.4);
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: achievementSlide 0.5s ease-out;
+        }
+        
+        @keyframes achievementSlide {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+        
+        #achievementPopup .achievementTitle {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        #achievementPopup .achievementDesc {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        /* 高级特效样式 */
+        .neonParticle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(2px);
+            box-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+        }
+        
+        .textEffect {
+            position: absolute;
+            font-weight: bold;
+            text-shadow: 0 0 10px currentColor;
+            animation: textFade 1.5s forwards;
+        }
+        
+        @keyframes textFade {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) rotate(0deg);
+            }
+            20% {
+                opacity: 1;
+                transform: scale(1.1) rotate(3deg);
+            }
+            80% {
+                opacity: 1;
+                transform: scale(1.1) rotate(-3deg);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.9) translateY(10px) rotate(0deg);
+            }
+        }
+        
+        .shockwave {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+            opacity: 0.8;
+            animation: shockwaveExpand 0.8s forwards;
+            pointer-events: none;
+        }
+        
+        @keyframes shockwaveExpand {
+            0% {
+                transform: scale(0);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+        
+        /* 背景颜色渐变动画 */
+        @keyframes bgColorShift {
+            0% {
+                background-color: rgba(255, 0, 0, 0.05);
+            }
+            20% {
+                background-color: rgba(255, 165, 0, 0.05);
+            }
+            40% {
+                background-color: rgba(255, 255, 0, 0.05);
+            }
+            60% {
+                background-color: rgba(0, 128, 0, 0.05);
+            }
+            80% {
+                background-color: rgba(0, 0, 255, 0.05);
+            }
+            100% {
+                background-color: rgba(128, 0, 128, 0.05);
+            }
+        }
+        
+        /* 新特效样式 */
+        .emojiExplosion {
+            position: absolute;
+            font-size: 30px;
+            animation: emojiFloat 3s forwards;
+            z-index: 6;
+        }
+        
+        @keyframes emojiFloat {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(-10px) rotate(5deg) scale(1);
+            }
+            90% {
+                opacity: 1;
+                transform: translateY(-100px) rotate(-5deg) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-120px) rotate(0deg) scale(0.8);
+            }
         }
         
         /* 响应式适配不同设备尺寸 */
@@ -238,6 +543,14 @@
             
             #checkinPanel {
                 max-height: 30%;
+            }
+            
+            .statItem {
+                padding: 5px 3px;
+            }
+            
+            .statLabel {
+                font-size: 10px;
             }
         }
         
@@ -256,6 +569,16 @@
             .checkinDay {
                 font-size: 12px;
             }
+            
+            #controls {
+                gap: 8px;
+            }
+            
+            .controlButton {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
         }
     </style>
 </head>
@@ -270,12 +593,26 @@
         
         <div id="pressureMeter">
             <div id="pressureBar"></div>
-            <div id="pressureValue">0%</div>
+            <div id="pressureValue">0</div>
         </div>
         
         <div id="checkinPanel">
             <div class="checkinHeader">
                 本月最高释放值: <span id="monthMax">0</span>
+            </div>
+            <div id="statsContainer">
+                <div class="statItem">
+                    <div class="statLabel">累计释放</div>
+                    <div class="statValue" id="totalPressureReleased">0</div>
+                </div>
+                <div class="statItem">
+                    <div class="statLabel">历史最高</div>
+                    <div class="statValue" id="allTimeMax">0</div>
+                </div>
+                <div class="statItem">
+                    <div class="statLabel">本周释放</div>
+                    <div class="statValue" id="weeklyTotal">0</div>
+                </div>
             </div>
             <div class="checkinGrid" id="checkinGrid"></div>
         </div>
@@ -283,11 +620,16 @@
         <div id="controls">
             <div class="controlButton" id="toggleCheckin">📅</div>
             <div class="controlButton" id="toggleEffects">✨</div>
+            <div class="controlButton" id="toggleSuper">🔥</div>
             <div class="controlButton" id="toggleSound">🔊</div>
         </div>
     </div>
     
     <div id="popupMessage"></div>
+    <div id="achievementPopup">
+        <div class="achievementTitle">新成就解锁！</div>
+        <div class="achievementDesc"></div>
+    </div>
     
     <script>
         // 游戏状态
@@ -297,19 +639,50 @@
             currentPressure: 0,
             maxPressure: 0,
             lastPressureUpdate: 0,
-            pressureIncreaseRate: 2, // 每100ms增加的百分比
+            pressureIncreaseRate: 2, // 每100ms增加的基础百分比
+            pressureTier: 0, // 压力等级，影响视觉效果
             effectsEnabled: true,
             soundEnabled: true,
             checkinVisible: false,
             particles: [],
             soundWaves: [],
-            maxParticles: 150, // 性能限制
+            neonParticles: [],
+            textEffects: [],
+            shockwaves: [],
+            maxParticles: 300, // 增加性能限制
             touchType: '', // 'short', 'long', 或 'rapid'
             rapidPressCount: 0,
             rapidPressTimeout: null,
             animationFrameId: null,
-            lastFrame: 0
+            lastFrame: 0,
+            superModeActive: false,
+            superModeTimer: null,
+            achievements: [], // 成就系统
+            totalPressureReleased: 0, // 累计释放压力
+            sessionStartTime: Date.now(), // 本次会话开始时间
+            customEffectsUnlocked: [], // 解锁的自定义效果
+            backgroundAnimationActive: false
         };
+        
+        // 成就定义
+        const achievements = [
+            { id: 'first-scream', title: '初次尖叫', description: '完成你的第一次尖叫', unlockAt: 1, type: 'pressure', unlocked: false },
+            { id: 'pressure-100', title: '解压高手', description: '达到100点压力值', unlockAt: 100, type: 'pressure', unlocked: false },
+            { id: 'pressure-500', title: '尖叫之王', description: '达到500点压力值', unlockAt: 500, type: 'pressure', unlocked: false },
+            { id: 'pressure-1000', title: '压力释放大师', description: '达到1000点压力值', unlockAt: 1000, type: 'pressure', unlocked: false },
+            { id: 'total-pressure-5000', title: '持续减压', description: '累计释放5000点压力', unlockAt: 5000, type: 'totalPressure', unlocked: false },
+            { id: 'rapid-master', title: '快速按压专家', description: '完成10次快速按压', unlockAt: 10, type: 'rapidPress', unlocked: false },
+            { id: 'daily-3', title: '坚持不懈', description: '连续3天打卡', unlockAt: 3, type: 'consecutive', unlocked: false },
+            { id: 'super-mode', title: '超级模式', description: '解锁超级释放模式', unlockAt: 300, type: 'pressure', unlocked: false }
+        ];
+        
+        // 自定义效果定义
+        const customEffects = [
+            { id: 'neon-explosion', name: '霓虹爆炸', unlockAt: 200, type: 'pressure', enabled: false },
+            { id: 'text-shower', name: '文字雨', unlockAt: 300, type: 'pressure', enabled: false },
+            { id: 'color-shift', name: '颜色变换', unlockAt: 500, type: 'pressure', enabled: false },
+            { id: 'shockwave', name: '冲击波', unlockAt: 400, type: 'pressure', enabled: false }
+        ];
         
         // DOM元素
         const mouthButton = document.getElementById('mouthButton');
@@ -322,6 +695,7 @@
         const popupMessage = document.getElementById('popupMessage');
         const toggleCheckin = document.getElementById('toggleCheckin');
         const toggleEffects = document.getElementById('toggleEffects');
+        const toggleSuper = document.getElementById('toggleSuper');
         const toggleSound = document.getElementById('toggleSound');
         
         // 检查存储是否可用
@@ -344,13 +718,20 @@
             const today = new Date();
             const dateKey = today.toISOString().split('T')[0]; // YYYY-MM-DD
             const monthKey = dateKey.substring(0, 7); // YYYY-MM
+            const weekStart = getWeekStart(today).toISOString().split('T')[0]; // 本周开始日期
             
             // 获取现有数据
             let checkinData = JSON.parse(localStorage.getItem('screamCheckinData') || '{}');
+            let statsData = JSON.parse(localStorage.getItem('screamStatsData') || '{}');
             
             // 更新今天的数据
             if (!checkinData[dateKey] || pressure > checkinData[dateKey]) {
                 checkinData[dateKey] = pressure;
+            }
+            
+            // 更新历史最高值
+            if (!statsData.allTimeMax || pressure > statsData.allTimeMax) {
+                statsData.allTimeMax = pressure;
             }
             
             // 更新月最大值
@@ -361,8 +742,66 @@
                 }
             }
             
+            // 更新本周累计释放值
+            if (!statsData.weeklyData) {
+                statsData.weeklyData = {};
+            }
+            
+            if (!statsData.weeklyData[weekStart]) {
+                statsData.weeklyData[weekStart] = pressure;
+            } else {
+                // 如果今天已经记录过，则只加上差值
+                const oldValue = checkinData[dateKey] || 0;
+                const diff = Math.max(pressure - oldValue, 0);
+                statsData.weeklyData[weekStart] += diff;
+            }
+            
+            // 更新累计释放总值
+            if (!statsData.totalReleased) {
+                statsData.totalReleased = pressure;
+            } else {
+                // 如果今天已经记录过，则只加上差值
+                const oldValue = checkinData[dateKey] || 0;
+                const diff = Math.max(pressure - oldValue, 0);
+                statsData.totalReleased += diff;
+            }
+            
+            // 检查连续打卡
+            if (!statsData.consecutiveDays) {
+                statsData.consecutiveDays = 1;
+                statsData.lastCheckin = dateKey;
+            } else {
+                const lastDate = new Date(statsData.lastCheckin);
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+                
+                if (lastDate.toISOString().split('T')[0] === yesterday.toISOString().split('T')[0]) {
+                    // 昨天打过卡，连续天数+1
+                    statsData.consecutiveDays++;
+                    statsData.lastCheckin = dateKey;
+                    
+                    // 检查连续打卡成就
+                    if (statsData.consecutiveDays === 3) {
+                        const achievement = achievements.find(a => a.id === 'daily-3');
+                        if (achievement && !achievement.unlocked) {
+                            achievement.unlocked = true;
+                            showAchievement(achievement.title, achievement.description);
+                            saveAchievements();
+                        }
+                    }
+                } else if (lastDate.toISOString().split('T')[0] !== dateKey) {
+                    // 不是昨天也不是今天，重置连续天数
+                    statsData.consecutiveDays = 1;
+                    statsData.lastCheckin = dateKey;
+                }
+            }
+            
             // 保存数据
             localStorage.setItem('screamCheckinData', JSON.stringify(checkinData));
+            localStorage.setItem('screamStatsData', JSON.stringify(statsData));
+            
+            // 更新游戏状态
+            gameState.totalPressureReleased = statsData.totalReleased || 0;
             
             // 更新UI
             updateCheckinDisplay();
@@ -372,6 +811,21 @@
             if (!storageAvailable('localStorage')) return {};
             
             return JSON.parse(localStorage.getItem('screamCheckinData') || '{}');
+        }
+        
+        // 获取本周开始日期（周一）
+        function getWeekStart(date) {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1); // 调整为周一
+            return new Date(d.setDate(diff));
+        }
+        
+        // 加载统计数据
+        function loadStatsData() {
+            if (!storageAvailable('localStorage')) return {};
+            
+            return JSON.parse(localStorage.getItem('screamStatsData') || '{}');
         }
         
         function updateCheckinDisplay() {
@@ -412,6 +866,9 @@
             // 获取打卡数据
             const checkinData = loadCheckinData();
             
+            // 获取统计数据
+            const statsData = loadStatsData();
+            
             // 计算月最大值
             let monthMaxValue = 0;
             const monthKey = today.toISOString().substring(0, 7); // YYYY-MM
@@ -424,6 +881,18 @@
             
             // 更新月最大值显示
             monthMax.textContent = monthMaxValue.toFixed(0);
+            
+            // 更新其他统计数据显示
+            document.getElementById('totalPressureReleased').textContent = 
+                (statsData.totalReleased || 0).toFixed(0);
+            
+            document.getElementById('allTimeMax').textContent = 
+                (statsData.allTimeMax || 0).toFixed(0);
+            
+            // 计算本周释放总值
+            const weekStart = getWeekStart(today).toISOString().split('T')[0];
+            document.getElementById('weeklyTotal').textContent = 
+                ((statsData.weeklyData && statsData.weeklyData[weekStart]) || 0).toFixed(0);
             
             // 添加月份的天数
             for (let i = 1; i <= daysInMonth; i++) {
@@ -442,6 +911,17 @@
                     valueSpan.className = 'checkinValue';
                     valueSpan.textContent = checkinData[dateString].toFixed(0);
                     dayCell.appendChild(valueSpan);
+                    
+                    // 如果是历史最高值，添加特殊标记
+                    if (checkinData[dateString] === statsData.allTimeMax) {
+                        dayCell.style.boxShadow = '0 0 8px rgba(255, 8, 68, 0.7)';
+                        dayCell.style.background = 'linear-gradient(135deg, #ff6a88 0%, #ff0844 100%)';
+                    }
+                }
+                
+                // 如果是今天，添加特殊标记
+                if (i === today.getDate()) {
+                    dayCell.style.border = '2px solid #ff9a8b';
                 }
                 
                 checkinGrid.appendChild(dayCell);
@@ -461,7 +941,83 @@
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
             const angle = Math.random() * Math.PI * 2;
-            const distance = 50 + (Math.random() * pressure * 1.5); // 压力越高，距离越远
+            
+            // 根据压力调整距离和效果
+            let distance, content, fontSize, color, duration, directionX, directionY;
+            
+            // 超级模式增强效果
+            const superMultiplier = gameState.superModeActive ? 1.5 : 1;
+            
+            // 随着压力值增大，动态增加粒子复杂度
+            if (pressure < 50) {
+                // 低压力：简单文本
+                distance = 50 + (Math.random() * pressure * 1.8);
+                
+                const options = ['a', 'あ', '啊', '아', '!', '?', '😮', '😯', '😲', '😣', 'oh', 'Ah'];
+                content = options[Math.floor(Math.random() * options.length)];
+                fontSize = (12 + Math.random() * 10) * superMultiplier;
+                
+                const hue = Math.floor(180 + Math.random() * 60); // 蓝色-青色范围
+                color = `hsl(${hue}, 80%, 60%)`;
+                
+                duration = 1000 + Math.random() * 1000;
+                directionX = (Math.random() - 0.5) * (pressure / 15);
+                directionY = (Math.random() - 0.5 - 0.3) * (pressure / 12);
+            } else if (pressure < 150) {
+                // 中等压力：更具表现力
+                distance = 60 + (Math.random() * pressure * 2);
+                
+                const options = [
+                    'AA', 'ああ', '啊啊', '아아', '!!', '?!', '😮', '😲', '😱', '😫',
+                    'OH', 'AHH', 'WOW', 'GAH', 'EEK', 'AGHH'
+                ];
+                content = options[Math.floor(Math.random() * options.length)];
+                fontSize = (16 + Math.random() * 14) * superMultiplier;
+                
+                const hue = Math.floor(280 + Math.random() * 60); // 紫色-洋红色范围
+                color = `hsl(${hue}, 85%, 65%)`;
+                
+                duration = 1200 + Math.random() * 1000;
+                directionX = (Math.random() - 0.5) * (pressure / 12);
+                directionY = (Math.random() - 0.5 - 0.4) * (pressure / 10);
+            } else if (pressure < 500) {
+                // 高压力：强烈表达
+                distance = 70 + (Math.random() * pressure * 2.2);
+                
+                const options = [
+                    'AAA!', 'あああ!!!', '啊啊啊!!!', '아아아!!!', '!!!', '?!!?!', 
+                    '😱', '😫', '😖', '😵', '😨', '💥', '💫', '💢', '⚡',
+                    'AHHH!', 'WOAH!', 'EEEK!', 'ARGH!', 'GYAH!'
+                ];
+                content = options[Math.floor(Math.random() * options.length)];
+                fontSize = (20 + Math.random() * 18) * superMultiplier;
+                
+                const hue = Math.floor(320 + Math.random() * 40) % 360; // 洋红色-红色范围
+                color = `hsl(${hue}, 90%, 60%)`;
+                
+                duration = 1400 + Math.random() * 1200;
+                directionX = (Math.random() - 0.5) * (pressure / 8);
+                directionY = (Math.random() - 0.5 - 0.5) * (pressure / 7);
+            } else {
+                // 极限压力：疯狂爆发
+                distance = 80 + (Math.random() * pressure * 2.5);
+                
+                const options = [
+                    'AAAAH!!!', 'あああああ!!!!', '啊啊啊啊啊!!!!', '아아아아아!!!!', 
+                    '!!!!!!!', '?!!?!?!!', '😱😱😱', '😫😫', '😖😖😖', '⚡💥⚡',
+                    'AHHHHH!!!', 'WOAAAH!!!', 'EEEEEK!!!', 'ARRRGH!!!'
+                ];
+                content = options[Math.floor(Math.random() * options.length)];
+                fontSize = (24 + Math.random() * 24) * superMultiplier;
+                
+                // 随机亮色
+                const hue = Math.floor(Math.random() * 360);
+                color = `hsl(${hue}, 100%, 65%)`;
+                
+                duration = 1800 + Math.random() * 1500;
+                directionX = (Math.random() - 0.5) * (pressure / 6) * superMultiplier;
+                directionY = (Math.random() - 0.5 - 0.6) * (pressure / 5) * superMultiplier;
+            }
             
             const posX = centerX + Math.cos(angle) * distance;
             const posY = centerY + Math.sin(angle) * distance;
@@ -469,40 +1025,22 @@
             particle.style.left = posX + 'px';
             particle.style.top = posY + 'px';
             
-            // 根据压力确定内容
-            let content;
-            let fontSize;
-            
-            if (pressure < 30) {
-                // 低压力：简单文本
-                const options = ['a', 'あ', '啊', '아', '!', '?', '😮', '😯', '😲'];
-                content = options[Math.floor(Math.random() * options.length)];
-                fontSize = 12 + Math.random() * 8;
-            } else if (pressure < 70) {
-                // 中等压力：更具表现力
-                const options = ['aa', 'ああ', '啊啊', '아아', '!!', '?!', '😮', '😲', '😱', '😫'];
-                content = options[Math.floor(Math.random() * options.length)];
-                fontSize = 16 + Math.random() * 12;
-            } else {
-                // 高压力：强烈表达
-                const options = [
-                    'AAA', 'あああ', '啊啊啊', '아아아', '!!!', '?!!', 
-                    '😱', '😫', '😖', '😵', '😨', '💥', '💫', '💢', '⚡'
-                ];
-                content = options[Math.floor(Math.random() * options.length)];
-                fontSize = 20 + Math.random() * 16;
-            }
-            
             // 应用样式
             particle.textContent = content;
             particle.style.fontSize = fontSize + 'px';
+            particle.style.color = color;
             particle.style.opacity = '0.9';
             particle.style.transform = 'rotate(' + (Math.random() * 40 - 20) + 'deg)';
+            particle.style.textShadow = `0 0 5px ${color}, 0 0 10px rgba(255, 255, 255, 0.5)`;
             
-            // 动画设置
-            const duration = 1000 + Math.random() * 1000; // 1-2秒
-            const directionX = (Math.random() - 0.5) * (pressure / 20); // 压力越高，扩散越大
-            const directionY = (Math.random() - 0.5 - 0.2) * (pressure / 15); // 轻微向上偏移
+            // 超级模式特效
+            if (gameState.superModeActive && Math.random() > 0.7) {
+                particle.style.fontWeight = 'bold';
+                particle.style.border = `1px solid ${color}`;
+                particle.style.padding = '2px 6px';
+                particle.style.borderRadius = '8px';
+                particle.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+            }
             
             // 添加到DOM
             effectsContainer.appendChild(particle);
@@ -514,10 +1052,11 @@
                 posY,
                 directionX,
                 directionY,
-                rotation: (Math.random() - 0.5) * 10,
-                opacity: 0.9,
+                rotation: (Math.random() - 0.5) * 15 * superMultiplier,
+                opacity: 0.95,
                 duration,
-                elapsed: 0
+                elapsed: 0,
+                color
             });
         }
         
@@ -550,6 +1089,182 @@
             });
         }
         
+        // 创建霓虹粒子特效
+        function createNeonParticle(pressure) {
+            if (!gameState.effectsEnabled || !gameState.customEffectsUnlocked.includes('neon-explosion')) return;
+            
+            const particle = document.createElement('div');
+            particle.className = 'neonParticle';
+            
+            // 随机颜色
+            const hues = [0, 60, 120, 180, 240, 300]; // 红、黄、绿、青、蓝、洋红
+            const hue = hues[Math.floor(Math.random() * hues.length)];
+            const color = `hsl(${hue}, 100%, 70%)`;
+            particle.style.backgroundColor = color;
+            particle.style.color = color;
+            
+            // 大小基于压力
+            const size = 5 + (Math.random() * pressure / 10);
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            
+            // 位置和动画
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 10 + (Math.random() * pressure);
+            
+            const posX = centerX + Math.cos(angle) * distance;
+            const posY = centerY + Math.sin(angle) * distance;
+            
+            particle.style.left = posX + 'px';
+            particle.style.top = posY + 'px';
+            
+            // 动画参数
+            const duration = 1000 + Math.random() * 2000;
+            const directionX = (Math.random() - 0.5) * pressure / 10;
+            const directionY = (Math.random() - 0.5) * pressure / 10;
+            const gravity = 0.05 + Math.random() * 0.1;
+            
+            effectsContainer.appendChild(particle);
+            
+            gameState.neonParticles.push({
+                element: particle,
+                posX,
+                posY,
+                directionX,
+                directionY,
+                gravity,
+                opacity: 1,
+                duration,
+                elapsed: 0,
+                size
+            });
+        }
+        
+        // 创建文字漂浮特效
+        function createTextEffect(pressure) {
+            if (!gameState.effectsEnabled || !gameState.customEffectsUnlocked.includes('text-shower')) return;
+            
+            const textEffect = document.createElement('div');
+            textEffect.className = 'textEffect';
+            
+            // 随机位置
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            const posX = Math.random() * screenWidth * 0.8 + screenWidth * 0.1;
+            const posY = Math.random() * screenHeight * 0.6 + screenHeight * 0.2;
+            
+            textEffect.style.left = posX + 'px';
+            textEffect.style.top = posY + 'px';
+            
+            // 随机颜色和大小
+            const hue = Math.floor(Math.random() * 360);
+            const color = `hsl(${hue}, 100%, 60%)`;
+            textEffect.style.color = color;
+            
+            const fontSize = 18 + Math.floor(Math.random() * 24);
+            textEffect.style.fontSize = `${fontSize}px`;
+            
+            // 随机角度
+            const rotate = Math.random() * 30 - 15;
+            textEffect.style.transform = `rotate(${rotate}deg)`;
+            
+            // 文字内容
+            const texts = [
+                '释放压力!', '尖叫吧!', '感觉好些了吗?', '继续!',
+                '释放!', '爆发!', '尖叫!', '呐喊!',
+                '✨放松✨', '治愈中...', '压力-100', '舒适+1',
+                pressure > 300 ? '太厉害了!' : '加油!',
+                pressure > 500 ? '尖叫之王!' : '继续尖叫!',
+                '✨✨✨'
+            ];
+            
+            textEffect.textContent = texts[Math.floor(Math.random() * texts.length)];
+            
+            effectsContainer.appendChild(textEffect);
+            
+            // 文字效果不需要添加到数组中更新，它使用CSS动画
+            setTimeout(() => {
+                textEffect.remove();
+            }, 1500);
+        }
+        
+        // 创建冲击波特效
+        function createShockwave(pressure) {
+            if (!gameState.effectsEnabled || !gameState.customEffectsUnlocked.includes('shockwave')) return;
+            
+            const shockwave = document.createElement('div');
+            shockwave.className = 'shockwave';
+            
+            // 中心位置
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            
+            // 大小比例
+            const maxRadius = Math.min(window.innerWidth, window.innerHeight) * 0.8;
+            
+            shockwave.style.left = (centerX - maxRadius / 2) + 'px';
+            shockwave.style.top = (centerY - maxRadius / 2) + 'px';
+            shockwave.style.width = maxRadius + 'px';
+            shockwave.style.height = maxRadius + 'px';
+            
+            effectsContainer.appendChild(shockwave);
+            
+            // 使用CSS动画，不需要添加到数组
+            setTimeout(() => {
+                shockwave.remove();
+            }, 800);
+        }
+        
+        // 创建表情符号爆炸
+        function createEmojiExplosion(pressure) {
+            if (!gameState.effectsEnabled) return;
+            
+            // 基于压力决定表情数量
+            const count = Math.min(Math.floor(pressure / 50) + 3, 15);
+            
+            const emojis = [
+                '😱', '😲', '😮', '😯', '😫', '😖', '😵', 
+                '💥', '⚡', '💢', '💫', '✨', '💦', '🌟',
+                '🔥', '⭐', '💯', '🎉', '🎊', '💨'
+            ];
+            
+            for (let i = 0; i < count; i++) {
+                const emoji = document.createElement('div');
+                emoji.className = 'emojiExplosion';
+                
+                // 随机表情
+                emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                // 随机位置 (从中心点发散)
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 40 + Math.random() * 100;
+                
+                const posX = centerX + Math.cos(angle) * distance;
+                const posY = centerY + Math.sin(angle) * distance;
+                
+                emoji.style.left = posX + 'px';
+                emoji.style.top = posY + 'px';
+                
+                // 随机大小
+                const size = 100 + Math.random() * 100;
+                emoji.style.fontSize = `${size}%`;
+                
+                // 随机动画延迟
+                emoji.style.animationDelay = `${Math.random() * 0.5}s`;
+                
+                effectsContainer.appendChild(emoji);
+                
+                // 清理
+                setTimeout(() => {
+                    emoji.remove();
+                }, 3000);
+            }
+        }
+        
         function applyScreenShake(pressure) {
             if (!gameState.effectsEnabled || pressure < 40) return;
             
@@ -572,7 +1287,7 @@
         }
         
         function updateVisualEffects(deltaTime) {
-            // 更新粒子
+            // 更新标准粒子
             for (let i = gameState.particles.length - 1; i >= 0; i--) {
                 const particle = gameState.particles[i];
                 particle.elapsed += deltaTime;
@@ -588,13 +1303,35 @@
                     
                     // 更新不透明度
                     const progress = particle.elapsed / particle.duration;
-                    particle.opacity = 0.9 * (1 - progress);
+                    particle.opacity = 0.95 * (1 - progress);
+                    
+                    // 添加轻微的动态效果 - 超级模式时更强
+                    const wobble = gameState.superModeActive ? 
+                        Math.sin(progress * 10) * 3 : 
+                        Math.sin(progress * 6) * 1.5;
                     
                     // 应用更新
                     particle.element.style.left = particle.posX + 'px';
                     particle.element.style.top = particle.posY + 'px';
                     particle.element.style.opacity = particle.opacity;
-                    particle.element.style.transform = `rotate(${particle.rotation * progress * 10}deg)`;
+                    
+                    // 随时间变换
+                    const rotationAmount = particle.rotation * progress * 10;
+                    const scaleEffect = 1 - progress * 0.3; // 随时间轻微缩小
+                    
+                    particle.element.style.transform = `
+                        rotate(${rotationAmount + wobble}deg) 
+                        scale(${scaleEffect})
+                    `;
+                    
+                    // 颜色变换特效
+                    if (gameState.customEffectsUnlocked.includes('color-shift') && Math.random() < 0.1) {
+                        const hue = (parseFloat(particle.color.match(/hsl\((\d+)/)[1]) + 10) % 360;
+                        const newColor = `hsl(${hue}, 85%, 60%)`;
+                        particle.element.style.color = newColor;
+                        particle.element.style.textShadow = `0 0 5px ${newColor}`;
+                        particle.color = newColor;
+                    }
                 }
             }
             
@@ -607,6 +1344,46 @@
                     // 移除过期波
                     wave.element.remove();
                     gameState.soundWaves.splice(i, 1);
+                }
+            }
+            
+            // 更新霓虹粒子
+            for (let i = gameState.neonParticles.length - 1; i >= 0; i--) {
+                const particle = gameState.neonParticles[i];
+                particle.elapsed += deltaTime;
+                
+                if (particle.elapsed >= particle.duration) {
+                    particle.element.remove();
+                    gameState.neonParticles.splice(i, 1);
+                } else {
+                    // 更新位置，加入重力和阻尼效果
+                    particle.directionY += particle.gravity * (deltaTime / 16); // 重力
+                    
+                    particle.posX += particle.directionX * (deltaTime / 16) * 3;
+                    particle.posY += particle.directionY * (deltaTime / 16) * 3;
+                    
+                    // 随时间变化大小和不透明度
+                    const progress = particle.elapsed / particle.duration;
+                    particle.opacity = 1 - progress;
+                    
+                    const currentSize = particle.size * (1 - progress * 0.7);
+                    
+                    // 应用更新
+                    particle.element.style.left = particle.posX + 'px';
+                    particle.element.style.top = particle.posY + 'px';
+                    particle.element.style.opacity = particle.opacity;
+                    particle.element.style.width = currentSize + 'px';
+                    particle.element.style.height = currentSize + 'px';
+                }
+            }
+            
+            // 更新背景颜色动画（如果启用）
+            if (gameState.backgroundAnimationActive && gameState.currentPressure > 300) {
+                if (Math.random() < 0.05) { // 随机改变背景颜色
+                    const body = document.body;
+                    body.style.animation = 'none';
+                    void body.offsetWidth; // 触发回流
+                    body.style.animation = 'bgColorShift 3s infinite';
                 }
             }
         }
@@ -699,55 +1476,324 @@
             const finalPressure = gameState.currentPressure;
             gameState.maxPressure = Math.max(gameState.maxPressure, finalPressure);
             
+            // 更新统计数据
+            gameState.totalPressureReleased += finalPressure;
+            
+            // 检查成就解锁
+            checkAchievements(finalPressure);
+            
+            // 检查自定义效果解锁
+            checkCustomEffectsUnlock(finalPressure);
+            
             // 保存打卡
             saveCheckin(finalPressure);
             
             // 显示完成消息
-            showPopupMessage('今日打卡完成！', 2000);
+            const messages = [
+                '今日打卡完成！',
+                `释放压力值: ${Math.floor(finalPressure)}`,
+                '感觉好些了吗？',
+                '压力已释放！',
+                '尖叫真痛快！',
+                '很好的释放！'
+            ];
+            
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            showPopupMessage(randomMessage, 2000);
             
             // 根据压力和触摸类型创建爆发效果
             if (gameState.effectsEnabled) {
+                // 基础效果
+                const isSuper = gameState.superModeActive;
+                
                 if (gameState.touchType === 'rapid') {
                     // 快速按压效果：大量小粒子
-                    for (let i = 0; i < 30; i++) {
-                        createParticle(Math.min(finalPressure + 30, 100));
+                    const count = isSuper ? 50 : 30;
+                    for (let i = 0; i < count; i++) {
+                        createParticle(finalPressure);
+                    }
+                    
+                    if (finalPressure > 200) {
+                        createEmojiExplosion(finalPressure);
                     }
                 } else if (gameState.touchType === 'short') {
                     // 短按效果：少量中等粒子
-                    for (let i = 0; i < 10; i++) {
-                        createParticle(Math.min(finalPressure + 20, 100));
+                    const count = isSuper ? 20 : 10;
+                    for (let i = 0; i < count; i++) {
+                        createParticle(finalPressure);
                     }
                 } else {
                     // 长按效果：基于压力
-                    const particleCount = Math.floor(finalPressure / 5) + 5;
+                    const scaleFactor = isSuper ? 1.5 : 1;
+                    const baseCount = Math.floor((finalPressure / (isSuper ? 15 : 20)) + 5);
+                    const particleCount = Math.min(baseCount, 100); // 限制最大数量避免性能问题
+                    
+                    // 主爆发效果
                     for (let i = 0; i < particleCount; i++) {
                         createParticle(finalPressure);
                     }
                     
                     // 高压力的额外效果
                     if (finalPressure > 70) {
-                        for (let i = 0; i < 20; i++) {
+                        // 创建表情爆发
+                        createEmojiExplosion(finalPressure);
+                        
+                        // 创建持续爆发的效果
+                        const burstCount = Math.min(Math.floor(finalPressure / 25), 30);
+                        for (let i = 0; i < burstCount; i++) {
                             setTimeout(() => {
                                 createParticle(finalPressure);
                                 applyScreenShake(finalPressure);
-                            }, i * 50);
+                                
+                                // 特殊解锁的效果
+                                if (i % 3 === 0 && gameState.customEffectsUnlocked.includes('neon-explosion')) {
+                                    for (let j = 0; j < 5; j++) {
+                                        createNeonParticle(finalPressure);
+                                    }
+                                }
+                                
+                                if (i % 4 === 0 && gameState.customEffectsUnlocked.includes('text-shower')) {
+                                    createTextEffect(finalPressure);
+                                }
+                                
+                                if (i === 0 && gameState.customEffectsUnlocked.includes('shockwave')) {
+                                    createShockwave(finalPressure);
+                                }
+                                
+                            }, i * 50 * (isSuper ? 0.7 : 1));
+                        }
+                    }
+                    
+                    // 超高压力特效 (500+)
+                    if (finalPressure > 500) {
+                        // 创建大型冲击波效果
+                        if (gameState.customEffectsUnlocked.includes('shockwave')) {
+                            for (let i = 0; i < 3; i++) {
+                                setTimeout(() => {
+                                    createShockwave(finalPressure);
+                                }, i * 300);
+                            }
+                        }
+                        
+                        // 创建更多文字效果
+                        if (gameState.customEffectsUnlocked.includes('text-shower')) {
+                            for (let i = 0; i < 5; i++) {
+                                setTimeout(() => {
+                                    createTextEffect(finalPressure);
+                                }, i * 200);
+                            }
+                        }
+                        
+                        // 临时激活背景颜色变化
+                        if (gameState.customEffectsUnlocked.includes('color-shift')) {
+                            gameState.backgroundAnimationActive = true;
+                            document.body.style.animation = 'bgColorShift 3s infinite';
+                            
+                            setTimeout(() => {
+                                gameState.backgroundAnimationActive = false;
+                                document.body.style.animation = 'none';
+                            }, 5000);
                         }
                     }
                 }
             }
         }
         
+        // 检查成就解锁
+        function checkAchievements(pressure) {
+            // 检查压力值成就
+            for (let achievement of achievements) {
+                if (achievement.unlocked) continue;
+                
+                let shouldUnlock = false;
+                
+                if (achievement.type === 'pressure' && pressure >= achievement.unlockAt) {
+                    shouldUnlock = true;
+                } else if (achievement.type === 'totalPressure' && gameState.totalPressureReleased >= achievement.unlockAt) {
+                    shouldUnlock = true;
+                } else if (achievement.type === 'rapidPress' && gameState.touchType === 'rapid' && gameState.rapidPressCount >= achievement.unlockAt) {
+                    shouldUnlock = true;
+                }
+                
+                if (shouldUnlock) {
+                    // 标记为已解锁
+                    achievement.unlocked = true;
+                    
+                    // 如果是超级模式成就，激活超级模式
+                    if (achievement.id === 'super-mode') {
+                        toggleSuperMode(true);
+                    }
+                    
+                    // 显示成就通知
+                    showAchievement(achievement.title, achievement.description);
+                    
+                    // 保存成就状态
+                    saveAchievements();
+                }
+            }
+        }
+        
+        // 检查自定义效果解锁
+        function checkCustomEffectsUnlock(pressure) {
+            for (let effect of customEffects) {
+                if (gameState.customEffectsUnlocked.includes(effect.id)) continue;
+                
+                if (effect.type === 'pressure' && pressure >= effect.unlockAt) {
+                    // 解锁新效果
+                    gameState.customEffectsUnlocked.push(effect.id);
+                    effect.enabled = true;
+                    
+                    // 显示解锁通知
+                    showPopupMessage(`新特效解锁: ${effect.name}！`, 2000);
+                    
+                    // 保存效果状态
+                    saveCustomEffects();
+                }
+            }
+        }
+        
+        // 显示成就通知
+        function showAchievement(title, description) {
+            const achievementPopup = document.getElementById('achievementPopup');
+            const titleElement = achievementPopup.querySelector('.achievementTitle');
+            const descElement = achievementPopup.querySelector('.achievementDesc');
+            
+            titleElement.textContent = '🏆 ' + title;
+            descElement.textContent = description;
+            
+            achievementPopup.style.display = 'block';
+            
+            setTimeout(() => {
+                achievementPopup.style.display = 'none';
+            }, 3000);
+        }
+        
+        // 保存成就和自定义效果状态
+        function saveAchievements() {
+            if (!storageAvailable('localStorage')) return;
+            
+            localStorage.setItem('screamAchievements', JSON.stringify(
+                achievements.map(a => ({ id: a.id, unlocked: a.unlocked }))
+            ));
+        }
+        
+        function saveCustomEffects() {
+            if (!storageAvailable('localStorage')) return;
+            
+            localStorage.setItem('screamCustomEffects', JSON.stringify(
+                gameState.customEffectsUnlocked
+            ));
+        }
+        
+        // 加载成就和自定义效果状态
+        function loadAchievements() {
+            if (!storageAvailable('localStorage')) return;
+            
+            const savedAchievements = JSON.parse(localStorage.getItem('screamAchievements') || '[]');
+            
+            for (let saved of savedAchievements) {
+                const achievement = achievements.find(a => a.id === saved.id);
+                if (achievement) {
+                    achievement.unlocked = saved.unlocked;
+                }
+            }
+        }
+        
+        function loadCustomEffects() {
+            if (!storageAvailable('localStorage')) return;
+            
+            const savedEffects = JSON.parse(localStorage.getItem('screamCustomEffects') || '[]');
+            gameState.customEffectsUnlocked = savedEffects;
+            
+            for (let effectId of savedEffects) {
+                const effect = customEffects.find(e => e.id === effectId);
+                if (effect) {
+                    effect.enabled = true;
+                }
+            }
+        }
+        
+        // 超级模式开关
+        function toggleSuperMode(forceState = null) {
+            // 检查是否已解锁超级模式
+            const superModeAchievement = achievements.find(a => a.id === 'super-mode');
+            if (!superModeAchievement.unlocked) {
+                showPopupMessage('需要达到300点压力值解锁超级模式', 2000);
+                return;
+            }
+            
+            // 设置状态
+            if (forceState !== null) {
+                gameState.superModeActive = forceState;
+            } else {
+                gameState.superModeActive = !gameState.superModeActive;
+            }
+            
+            // 更新UI
+            const toggleButton = document.getElementById('toggleSuper');
+            toggleButton.textContent = gameState.superModeActive ? '🔥' : '💤';
+            
+            // 超级模式指示器
+            let indicator = document.querySelector('.superModeIndicator');
+            
+            if (gameState.superModeActive) {
+                if (!indicator) {
+                    indicator = document.createElement('div');
+                    indicator.className = 'superModeIndicator';
+                    indicator.textContent = '🔥 超级模式 🔥';
+                    document.getElementById('gameContainer').appendChild(indicator);
+                }
+                
+                // 超级模式自动关闭定时器
+                if (gameState.superModeTimer) {
+                    clearTimeout(gameState.superModeTimer);
+                }
+                
+                gameState.superModeTimer = setTimeout(() => {
+                    toggleSuperMode(false);
+                }, 60000); // 60秒后自动关闭
+                
+                // 显示提示
+                showPopupMessage('超级模式已激活！释放压力效果增强！', 2000);
+            } else {
+                if (indicator) {
+                    indicator.remove();
+                }
+                
+                if (gameState.superModeTimer) {
+                    clearTimeout(gameState.superModeTimer);
+                    gameState.superModeTimer = null;
+                }
+            }
+        }
+        
         // UI更新功能
         function updatePressureDisplay() {
-            pressureBar.style.width = gameState.currentPressure + '%';
-            pressureValue.textContent = Math.floor(gameState.currentPressure) + '%';
+            // 计算压力条宽度，最大100%
+            const barWidth = Math.min(gameState.currentPressure, 100);
+            pressureBar.style.width = barWidth + '%';
+            
+            // 更新压力值显示
+            pressureValue.textContent = Math.floor(gameState.currentPressure);
+            
+            // 调整压力条的渐变位置，以在高压力下显示红色区域
+            if (gameState.currentPressure > 100) {
+                const gradientPos = Math.min((gameState.currentPressure - 100) / 5, 100);
+                pressureBar.style.backgroundPosition = `${gradientPos}% 0`;
+            } else {
+                pressureBar.style.backgroundPosition = '0% 0';
+            }
             
             // 根据压力更新按钮外观
             if (gameState.isPressed) {
                 if (gameState.touchType !== 'rapid') {
-                    if (gameState.currentPressure > 80) {
+                    if (gameState.currentPressure > 500) {
+                        mouthButton.textContent = '🤯';
+                    } else if (gameState.currentPressure > 300) {
+                        mouthButton.textContent = '😵';
+                    } else if (gameState.currentPressure > 150) {
                         mouthButton.textContent = '😱';
-                    } else if (gameState.currentPressure > 60) {
+                    } else if (gameState.currentPressure > 80) {
                         mouthButton.textContent = '😫';
                     } else if (gameState.currentPressure > 40) {
                         mouthButton.textContent = '😲';
@@ -757,10 +1803,33 @@
                 }
                 
                 // 随压力稍微缩放按钮
-                const scale = 1 + (gameState.currentPressure / 500);
+                let scale = 1;
+                
+                if (gameState.currentPressure <= 100) {
+                    scale = 1 + (gameState.currentPressure / 500);
+                } else if (gameState.currentPressure <= 500) {
+                    scale = 1.2 + ((gameState.currentPressure - 100) / 1000);
+                } else {
+                    scale = 1.6 + ((gameState.currentPressure - 500) / 5000);
+                }
+                
                 mouthButton.style.transform = `scale(${scale})`;
+                
+                // 超高压力时添加发光效果
+                if (gameState.currentPressure > 300) {
+                    const intensity = Math.min((gameState.currentPressure - 300) / 10, 30);
+                    mouthButton.style.boxShadow = `0 8px 20px rgba(255, 107, 107, 0.4), 
+                                                   0 2px 8px rgba(0, 0, 0, 0.2),
+                                                   inset 0 -2px 5px rgba(0, 0, 0, 0.1),
+                                                   inset 0 2px 5px rgba(255, 255, 255, 0.5),
+                                                   0 0 ${intensity}px ${intensity/2}px rgba(255, 50, 50, 0.8)`;
+                }
             } else {
                 mouthButton.style.transform = 'scale(1)';
+                mouthButton.style.boxShadow = `0 8px 20px rgba(255, 107, 107, 0.4), 
+                                              0 2px 8px rgba(0, 0, 0, 0.2),
+                                              inset 0 -2px 5px rgba(0, 0, 0, 0.1),
+                                              inset 0 2px 5px rgba(255, 255, 255, 0.5)`;
             }
         }
         
@@ -793,19 +1862,39 @@
                         increaseAmount = gameState.pressureIncreaseRate;
                     }
                     
-                    gameState.currentPressure = Math.min(100, gameState.currentPressure + increaseAmount);
+                    // 长按时间越长，增长率越大
+                    const pressTime = now - gameState.pressStartTime;
+                    const timeBonus = (pressTime > 3000) ? (pressTime - 3000) / 10000 : 0;
+                    increaseAmount += timeBonus;
+                    
+                    // 超级模式增加增长率
+                    if (gameState.superModeActive) {
+                        increaseAmount *= 1.5;
+                    }
+                    
+                    // 不再设置上限值
+                    gameState.currentPressure += increaseAmount;
                     gameState.lastPressureUpdate = now;
                     
                     // 基于压力创建视觉效果
                     if (gameState.currentPressure > 20) {
-                        createSoundWave(gameState.currentPressure);
+                        createSoundWave(Math.min(gameState.currentPressure, 300)); // 限制声波大小
                         
-                        if (Math.random() < gameState.currentPressure / 100) {
+                        if (Math.random() < gameState.currentPressure / 500) {
                             createParticle(gameState.currentPressure);
                         }
                         
                         if (gameState.currentPressure > 40 && Math.random() < 0.3) {
-                            applyScreenShake(gameState.currentPressure);
+                            applyScreenShake(Math.min(gameState.currentPressure, 200)); // 限制抖动幅度
+                        }
+                        
+                        // 高压力特殊效果
+                        if (gameState.currentPressure > 300 && gameState.customEffectsUnlocked.includes('neon-explosion') && Math.random() < 0.05) {
+                            createNeonParticle(gameState.currentPressure);
+                        }
+                        
+                        if (gameState.currentPressure > 400 && gameState.customEffectsUnlocked.includes('text-shower') && Math.random() < 0.02) {
+                            createTextEffect(gameState.currentPressure);
                         }
                     }
                 }
@@ -820,7 +1909,7 @@
             gameState.animationFrameId = requestAnimationFrame(gameLoop);
             
             // 如果没有活动，停止循环
-            if (!gameState.isPressed && gameState.particles.length === 0 && gameState.soundWaves.length === 0) {
+            if (!gameState.isPressed && gameState.particles.length === 0 && gameState.soundWaves.length === 0 && gameState.neonParticles.length === 0) {
                 cancelAnimationFrame(gameState.animationFrameId);
                 gameState.animationFrameId = null;
             }
@@ -845,12 +1934,48 @@
                 effectsContainer.innerHTML = '';
                 gameState.particles = [];
                 gameState.soundWaves = [];
+                gameState.neonParticles = [];
+                gameState.textEffects = [];
+                gameState.shockwaves = [];
+                
+                // 关闭背景动画
+                if (gameState.backgroundAnimationActive) {
+                    document.body.style.animation = 'none';
+                    gameState.backgroundAnimationActive = false;
+                }
             }
         }
         
         function toggleSoundEnabled() {
             gameState.soundEnabled = !gameState.soundEnabled;
             toggleSound.textContent = gameState.soundEnabled ? '🔊' : '🔇';
+        }
+        
+        // 初始化功能
+        function init() {
+            // 加载成就和自定义效果
+            loadAchievements();
+            loadCustomEffects();
+            
+            // 加载累计释放值
+            const statsData = loadStatsData();
+            gameState.totalPressureReleased = statsData.totalReleased || 0;
+            
+            // 更新超级模式按钮
+            const superModeAchievement = achievements.find(a => a.id === 'super-mode');
+            if (superModeAchievement && superModeAchievement.unlocked) {
+                toggleSuper.textContent = '💤'; // 解锁但未激活
+            } else {
+                toggleSuper.textContent = '🔒'; // 未解锁
+            }
+            
+            // 初始化打卡面板
+            updateCheckinDisplay();
+            
+            // 显示欢迎消息
+            setTimeout(() => {
+                showPopupMessage('欢迎使用尖叫爆发器Plus版！', 2000);
+            }, 500);
         }
         
         // 事件监听器
@@ -866,16 +1991,14 @@
         // 控制按钮
         toggleCheckin.addEventListener('click', toggleCheckinPanel);
         toggleEffects.addEventListener('click', toggleEffectsEnabled);
+        toggleSuper.addEventListener('click', () => toggleSuperMode());
         toggleSound.addEventListener('click', toggleSoundEnabled);
         
         // 防止默认触摸行为以避免滚动
         document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
         
-        // 初始设置
-        updateCheckinDisplay();
-        
-        // 欢迎消息
-        showPopupMessage('欢迎使用尖叫爆发器Plus版！', 2000);
+        // 初始化
+        init();
     </script>
 </body>
 </html>
