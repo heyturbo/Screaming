@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>尖叫爆发器Plus版</title>
+    <title>尖叫爆发器Plus版 - 终极增强版</title>
     <style>
         /* 基础样式重置和全页面设置 */
         * {
@@ -24,6 +24,7 @@
             justify-content: center;
             align-items: center;
             touch-action: none; /* 防止浏览器处理触摸事件 */
+            transition: background 0.8s ease;
         }
         
         /* 游戏容器 */
@@ -36,6 +37,81 @@
             align-items: center;
             padding: 20px;
             position: relative;
+            z-index: 5;
+        }
+        
+        /* 动态背景效果 */
+        #dynamicBackground {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0;
+            background-size: 400% 400%;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+        
+        /* 波浪背景 */
+        .wave-container {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+        
+        .wave {
+            position: absolute;
+            left: -100%;
+            width: 300%;
+            height: 100%;
+            background-repeat: repeat-x;
+            transform-origin: center bottom;
+            opacity: 0.1;
+        }
+        
+        .wave1 {
+            background-image: radial-gradient(circle at center, transparent 30%, rgba(255, 255, 255, 0.2) 30%);
+            background-size: 60px 60px;
+            animation: wave-animation 18s linear infinite;
+            bottom: 0;
+            height: 120%;
+        }
+        
+        .wave2 {
+            background-image: radial-gradient(circle at center, transparent 30%, rgba(255, 255, 255, 0.3) 30%);
+            background-size: 90px 90px;
+            animation: wave-animation 15s linear infinite reverse;
+            bottom: 0;
+            height: 120%;
+        }
+        
+        .wave3 {
+            background-image: radial-gradient(circle at center, transparent 30%, rgba(255, 255, 255, 0.15) 30%);
+            background-size: 120px 120px;
+            animation: wave-animation 20s linear infinite;
+            bottom: 0;
+            height: 120%;
+        }
+        
+        @keyframes wave-animation {
+            0% {
+                transform: translateX(0) translateY(0) scaleY(1);
+            }
+            50% {
+                transform: translateX(25%) translateY(5px) scaleY(1.1);
+            }
+            100% {
+                transform: translateX(50%) translateY(0) scaleY(1);
+            }
         }
         
         /* 头部 */
@@ -46,6 +122,8 @@
             font-size: 24px;
             font-weight: bold;
             z-index: 10;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: color 0.5s ease;
         }
         
         /* 主游戏区域 */
@@ -69,7 +147,7 @@
             align-items: center;
             font-size: 60px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.3s;
+            transition: transform 0.2s, box-shadow 0.3s, clip-path 0.5s, border-radius 0.5s;
             user-select: none;
             z-index: 20;
             box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4), 
@@ -81,6 +159,16 @@
             overflow: hidden;
         }
         
+        #mouthButton::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 60%);
+            pointer-events: none;
+            transition: transform 0.3s;
+        }
+        
         #mouthButton:active {
             transform: scale(0.95);
             box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3), 
@@ -89,13 +177,30 @@
                         inset 0 1px 3px rgba(255, 255, 255, 0.3);
         }
         
-        #mouthButton::before {
-            content: '';
+        /* 按钮内部波纹 */
+        #buttonRipple {
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 60%);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 70%);
+            transform: scale(0);
+            opacity: 0;
             pointer-events: none;
+            z-index: 2;
+        }
+        
+        @keyframes buttonRipple {
+            0% {
+                transform: scale(0);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
         }
         
         /* 特效容器 */
@@ -484,6 +589,25 @@
             }
         }
         
+        /* 形变动画 */
+        @keyframes morphAnimation {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+            25% {
+                transform: rotate(5deg) scale(1.05);
+            }
+            50% {
+                transform: rotate(0deg) scale(1.1);
+            }
+            75% {
+                transform: rotate(-5deg) scale(1.05);
+            }
+            100% {
+                transform: rotate(0deg) scale(1);
+            }
+        }
+        
         /* 背景颜色渐变动画 */
         @keyframes bgColorShift {
             0% {
@@ -530,6 +654,75 @@
             100% {
                 opacity: 0;
                 transform: translateY(-120px) rotate(0deg) scale(0.8);
+            }
+        }
+        
+        /* 星星特效 */
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite ease-in-out;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            z-index: 4;
+            pointer-events: none;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.2;
+                transform: scale(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+        
+        /* 闪电特效 */
+        .lightning {
+            position: absolute;
+            background: linear-gradient(to bottom, white, transparent);
+            width: 2px;
+            transform-origin: top;
+            animation: lightning 0.5s ease-out forwards;
+            z-index: 4;
+        }
+        
+        @keyframes lightning {
+            0% {
+                opacity: 1;
+                height: 0;
+            }
+            100% {
+                opacity: 0;
+                height: 100vh;
+            }
+        }
+        
+        /* 霓虹发光边框 */
+        .glowingBorder {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            animation: glowingBorder 3s infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        @keyframes glowingBorder {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(255, 0, 0, 0.7), 0 0 20px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(255, 0, 0, 0.3);
+            }
+            25% {
+                box-shadow: 0 0 5px rgba(255, 165, 0, 0.7), 0 0 20px rgba(255, 165, 0, 0.5), inset 0 0 10px rgba(255, 165, 0, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 5px rgba(0, 255, 0, 0.7), 0 0 20px rgba(0, 255, 0, 0.5), inset 0 0 10px rgba(0, 255, 0, 0.3);
+            }
+            75% {
+                box-shadow: 0 0 5px rgba(0, 0, 255, 0.7), 0 0 20px rgba(0, 0, 255, 0.5), inset 0 0 10px rgba(0, 0, 255, 0.3);
             }
         }
         
@@ -583,11 +776,22 @@
     </style>
 </head>
 <body>
+    <div id="dynamicBackground"></div>
+    <div class="wave-container" id="waveContainer">
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
+    </div>
+    
     <div id="gameContainer">
         <div id="gameHeader">尖叫爆发器Plus版</div>
         
         <div id="gameplayArea">
-            <div id="mouthButton">😮</div>
+            <div id="mouthButton">
+                😮
+                <div id="buttonRipple"></div>
+                <div class="glowingBorder"></div>
+            </div>
             <div id="effectsContainer"></div>
         </div>
         
@@ -649,7 +853,9 @@
             neonParticles: [],
             textEffects: [],
             shockwaves: [],
-            maxParticles: 300, // 增加性能限制
+            stars: [],
+            lightnings: [],
+            maxParticles: 500, // 增加性能限制
             touchType: '', // 'short', 'long', 或 'rapid'
             rapidPressCount: 0,
             rapidPressTimeout: null,
@@ -661,7 +867,16 @@
             totalPressureReleased: 0, // 累计释放压力
             sessionStartTime: Date.now(), // 本次会话开始时间
             customEffectsUnlocked: [], // 解锁的自定义效果
-            backgroundAnimationActive: false
+            backgroundAnimationActive: false,
+            buttonMorphLevel: 0, // 按钮变形等级
+            buttonMorphPoints: 8, // 变形多边形的点数
+            buttonMorphAngles: [], // 变形多边形的角度
+            buttonMorphRadii: [], // 变形多边形的半径
+            morphAnimationActive: false, // 变形动画状态
+            lastBackgroundUpdateTime: 0, // 最后一次背景更新时间
+            waveAnimationActive: false, // 波浪动画状态
+            starCreationInterval: null, // 星星创建间隔
+            dynamicEffectsEnabled: true // 动态特效开关
         };
         
         // 成就定义
@@ -670,10 +885,14 @@
             { id: 'pressure-100', title: '解压高手', description: '达到100点压力值', unlockAt: 100, type: 'pressure', unlocked: false },
             { id: 'pressure-500', title: '尖叫之王', description: '达到500点压力值', unlockAt: 500, type: 'pressure', unlocked: false },
             { id: 'pressure-1000', title: '压力释放大师', description: '达到1000点压力值', unlockAt: 1000, type: 'pressure', unlocked: false },
+            { id: 'pressure-2000', title: '超越极限', description: '突破2000点压力值', unlockAt: 2000, type: 'pressure', unlocked: false },
             { id: 'total-pressure-5000', title: '持续减压', description: '累计释放5000点压力', unlockAt: 5000, type: 'totalPressure', unlocked: false },
+            { id: 'total-pressure-10000', title: '减压专家', description: '累计释放10000点压力', unlockAt: 10000, type: 'totalPressure', unlocked: false },
             { id: 'rapid-master', title: '快速按压专家', description: '完成10次快速按压', unlockAt: 10, type: 'rapidPress', unlocked: false },
             { id: 'daily-3', title: '坚持不懈', description: '连续3天打卡', unlockAt: 3, type: 'consecutive', unlocked: false },
-            { id: 'super-mode', title: '超级模式', description: '解锁超级释放模式', unlockAt: 300, type: 'pressure', unlocked: false }
+            { id: 'daily-7', title: '一周坚持', description: '连续7天打卡', unlockAt: 7, type: 'consecutive', unlocked: false },
+            { id: 'super-mode', title: '超级模式', description: '解锁超级释放模式', unlockAt: 300, type: 'pressure', unlocked: false },
+            { id: 'morph-master', title: '形变大师', description: '体验形变效果', unlockAt: 800, type: 'pressure', unlocked: false }
         ];
         
         // 自定义效果定义
@@ -681,11 +900,16 @@
             { id: 'neon-explosion', name: '霓虹爆炸', unlockAt: 200, type: 'pressure', enabled: false },
             { id: 'text-shower', name: '文字雨', unlockAt: 300, type: 'pressure', enabled: false },
             { id: 'color-shift', name: '颜色变换', unlockAt: 500, type: 'pressure', enabled: false },
-            { id: 'shockwave', name: '冲击波', unlockAt: 400, type: 'pressure', enabled: false }
+            { id: 'shockwave', name: '冲击波', unlockAt: 400, type: 'pressure', enabled: false },
+            { id: 'star-field', name: '星空效果', unlockAt: 700, type: 'pressure', enabled: false },
+            { id: 'lightning', name: '闪电效果', unlockAt: 900, type: 'pressure', enabled: false },
+            { id: 'wave-background', name: '波浪背景', unlockAt: 600, type: 'pressure', enabled: false },
+            { id: 'button-morph', name: '按钮形变', unlockAt: 800, type: 'pressure', enabled: false }
         ];
         
         // DOM元素
         const mouthButton = document.getElementById('mouthButton');
+        const buttonRipple = document.getElementById('buttonRipple');
         const effectsContainer = document.getElementById('effectsContainer');
         const pressureBar = document.getElementById('pressureBar');
         const pressureValue = document.getElementById('pressureValue');
@@ -697,6 +921,238 @@
         const toggleEffects = document.getElementById('toggleEffects');
         const toggleSuper = document.getElementById('toggleSuper');
         const toggleSound = document.getElementById('toggleSound');
+        const dynamicBackground = document.getElementById('dynamicBackground');
+        const waveContainer = document.getElementById('waveContainer');
+        const gameHeader = document.getElementById('gameHeader');
+        
+        // 初始化按钮形变参数
+        function initButtonMorphParams() {
+            const points = gameState.buttonMorphPoints;
+            gameState.buttonMorphAngles = [];
+            gameState.buttonMorphRadii = [];
+            
+            for (let i = 0; i < points; i++) {
+                // 均匀分布的角度，添加一些随机性
+                gameState.buttonMorphAngles.push((i / points) * 2 * Math.PI);
+                // 初始半径一致（圆形）
+                gameState.buttonMorphRadii.push(50); // 50%的半径，相对于按钮大小
+            }
+        }
+        
+        // 更新按钮的形状
+        function updateButtonShape(pressure) {
+            if (!gameState.customEffectsUnlocked.includes('button-morph') || !gameState.dynamicEffectsEnabled) {
+                // 如果未解锁形变效果，保持圆形
+                mouthButton.style.borderRadius = '50%';
+                mouthButton.style.clipPath = 'none';
+                return;
+            }
+            
+            // 形变强度基于压力值
+            const morphIntensity = Math.min(pressure / 2000, 0.6); // 最大变形幅度60%
+            const points = gameState.buttonMorphPoints;
+            
+            // 随机更新角度和半径
+            for (let i = 0; i < points; i++) {
+                // 角度小幅度波动
+                if (Math.random() < 0.1) {
+                    gameState.buttonMorphAngles[i] += (Math.random() - 0.5) * 0.05;
+                }
+                
+                // 半径波动
+                if (Math.random() < 0.2) {
+                    // 基础半径 + 随机波动 * 形变强度
+                    const fluctuation = (Math.random() - 0.5) * 30 * morphIntensity;
+                    gameState.buttonMorphRadii[i] = 50 + fluctuation;
+                    // 确保不会太小或太大
+                    gameState.buttonMorphRadii[i] = Math.max(30, Math.min(70, gameState.buttonMorphRadii[i]));
+                }
+            }
+            
+            // 构建clip-path多边形
+            let clipPath = 'polygon(';
+            const centerX = 50; // 中心点的X坐标 (%)
+            const centerY = 50; // 中心点的Y坐标 (%)
+            
+            for (let i = 0; i < points; i++) {
+                const angle = gameState.buttonMorphAngles[i];
+                const radius = gameState.buttonMorphRadii[i];
+                
+                const x = centerX + Math.cos(angle) * radius;
+                const y = centerY + Math.sin(angle) * radius;
+                
+                clipPath += `${x}% ${y}%`;
+                
+                if (i < points - 1) {
+                    clipPath += ', ';
+                }
+            }
+            
+            clipPath += ')';
+            mouthButton.style.clipPath = clipPath;
+            mouthButton.style.borderRadius = '0'; // 使用clip-path时需要禁用borderRadius
+        }
+        
+        // 初始化形变
+        initButtonMorphParams();
+        
+        // 触发按钮形变动画
+        function triggerButtonMorphAnimation() {
+            if (!gameState.morphAnimationActive && gameState.customEffectsUnlocked.includes('button-morph') && gameState.dynamicEffectsEnabled) {
+                gameState.morphAnimationActive = true;
+                mouthButton.style.animation = 'morphAnimation 0.5s ease-in-out';
+                
+                setTimeout(() => {
+                    mouthButton.style.animation = 'none';
+                    gameState.morphAnimationActive = false;
+                }, 500);
+            }
+        }
+        
+        // 更新背景颜色
+        function updateBackgroundColor(pressure) {
+            if (!gameState.dynamicEffectsEnabled) return;
+            
+            // 每500ms才更新一次背景，避免频繁更新
+            const now = Date.now();
+            if (now - gameState.lastBackgroundUpdateTime < 500) return;
+            gameState.lastBackgroundUpdateTime = now;
+            
+            // 基于压力值计算HSL颜色
+            // 从蓝色(220)过渡到红色(0)
+            const hue = Math.max(220 - (pressure / 15), 0);
+            // 饱和度随压力增加
+            const saturation = Math.min(70 + (pressure / 20), 100);
+            // 亮度稍微降低，创造强烈感
+            const lightness = Math.max(90 - (pressure / 40), 60);
+            
+            // 设置背景色
+            document.body.style.background = `linear-gradient(135deg, hsl(${hue}, ${saturation}%, ${lightness}%) 0%, hsl(${hue + 20}, ${saturation - 10}%, ${lightness - 10}%) 100%)`;
+            
+            // 更新标题颜色，确保可读性
+            if (pressure > 800) {
+                gameHeader.style.color = 'white';
+                gameHeader.style.textShadow = '0 2px 4px rgba(0, 0, 0, 0.3)';
+            } else {
+                gameHeader.style.color = '#333';
+                gameHeader.style.textShadow = '0 2px 4px rgba(255, 255, 255, 0.3)';
+            }
+            
+            // 高压力下激活动态背景
+            if (pressure > 600 && gameState.customEffectsUnlocked.includes('color-shift')) {
+                const intensity = Math.min((pressure - 600) / 1400, 0.8);
+                dynamicBackground.style.opacity = intensity.toFixed(2);
+                dynamicBackground.style.background = `linear-gradient(45deg, 
+                    rgba(255,0,0,${intensity * 0.3}), 
+                    rgba(255,255,0,${intensity * 0.3}), 
+                    rgba(0,255,0,${intensity * 0.3}), 
+                    rgba(0,255,255,${intensity * 0.3}), 
+                    rgba(0,0,255,${intensity * 0.3}), 
+                    rgba(255,0,255,${intensity * 0.3}))`;
+                dynamicBackground.style.backgroundSize = '400% 400%';
+                dynamicBackground.style.animation = 'bgColorShift 8s ease infinite';
+            } else {
+                dynamicBackground.style.opacity = '0';
+                dynamicBackground.style.animation = 'none';
+            }
+            
+            // 激活波浪背景
+            if (pressure > 500 && gameState.customEffectsUnlocked.includes('wave-background') && !gameState.waveAnimationActive) {
+                gameState.waveAnimationActive = true;
+                waveContainer.style.opacity = '1';
+            } else if (pressure < 400 && gameState.waveAnimationActive) {
+                gameState.waveAnimationActive = false;
+                waveContainer.style.opacity = '0';
+            }
+        }
+        
+        // 触发按钮波纹效果
+        function triggerButtonRipple() {
+            buttonRipple.style.animation = 'none';
+            void buttonRipple.offsetWidth; // 触发重绘
+            buttonRipple.style.animation = 'buttonRipple 0.8s ease-out';
+        }
+        
+        // 创建星星效果
+        function createStarField() {
+            if (!gameState.customEffectsUnlocked.includes('star-field') || !gameState.dynamicEffectsEnabled) return;
+            
+            if (gameState.currentPressure > 700 && gameState.starCreationInterval === null) {
+                // 每200ms创建一个星星
+                gameState.starCreationInterval = setInterval(() => {
+                    if (gameState.stars.length > 50) return; // 限制最大数量
+                    
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    
+                    // 随机位置
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight;
+                    
+                    // 随机大小
+                    const size = 1 + Math.random() * 3;
+                    
+                    star.style.left = `${x}px`;
+                    star.style.top = `${y}px`;
+                    star.style.width = `${size}px`;
+                    star.style.height = `${size}px`;
+                    
+                    // 随机动画延迟
+                    star.style.animationDelay = `${Math.random() * 2}s`;
+                    
+                    // 添加到DOM
+                    effectsContainer.appendChild(star);
+                    
+                    // 添加到数组
+                    gameState.stars.push({
+                        element: star,
+                        duration: 5000 + Math.random() * 5000,
+                        elapsed: 0
+                    });
+                    
+                }, 200);
+            } else if (gameState.currentPressure < 600 && gameState.starCreationInterval !== null) {
+                clearInterval(gameState.starCreationInterval);
+                gameState.starCreationInterval = null;
+            }
+        }
+        
+        // 创建闪电效果
+        function createLightning(pressure) {
+            if (!gameState.customEffectsUnlocked.includes('lightning') || !gameState.dynamicEffectsEnabled) return;
+            
+            if (gameState.lightnings.length > 3) return; // 限制同时存在的闪电数量
+            
+            const lightning = document.createElement('div');
+            lightning.className = 'lightning';
+            
+            // 随机位置
+            const x = Math.random() * window.innerWidth;
+            lightning.style.left = `${x}px`;
+            lightning.style.top = '0';
+            
+            // 随机旋转
+            const rotate = (Math.random() - 0.5) * 30;
+            lightning.style.transform = `rotate(${rotate}deg)`;
+            
+            // 随机宽度
+            const width = 1 + Math.random() * 3;
+            lightning.style.width = `${width}px`;
+            
+            // 根据压力调整亮度
+            const opacity = Math.min(0.5 + (pressure / 2000), 1);
+            lightning.style.opacity = opacity;
+            
+            // 添加到DOM
+            effectsContainer.appendChild(lightning);
+            
+            // 添加到数组
+            gameState.lightnings.push({
+                element: lightning,
+                duration: 500,
+                elapsed: 0
+            });
+        }
         
         // 检查存储是否可用
         function storageAvailable(type) {
@@ -783,6 +1239,15 @@
                     // 检查连续打卡成就
                     if (statsData.consecutiveDays === 3) {
                         const achievement = achievements.find(a => a.id === 'daily-3');
+                        if (achievement && !achievement.unlocked) {
+                            achievement.unlocked = true;
+                            showAchievement(achievement.title, achievement.description);
+                            saveAchievements();
+                        }
+                    }
+                    
+                    if (statsData.consecutiveDays === 7) {
+                        const achievement = achievements.find(a => a.id === 'daily-7');
                         if (achievement && !achievement.unlocked) {
                             achievement.unlocked = true;
                             showAchievement(achievement.title, achievement.description);
@@ -1061,7 +1526,7 @@
         }
         
         function createSoundWave(pressure) {
-            if (!gameState.effectsEnabled) return;
+            if (!gameState.effectsEnabled || !gameState.dynamicEffectsEnabled) return;
             
             const wave = document.createElement('div');
             wave.className = 'soundWave';
@@ -1074,9 +1539,16 @@
             wave.style.left = 'calc(50% - ' + (size / 2) + 'px)';
             wave.style.top = 'calc(50% - ' + (size / 2) + 'px)';
             
-            // 基于压力的动画持续时间
+            // 基于压力的动画持续时间和颜色
             const duration = 1000 - (pressure * 5); // 压力越高越快
             wave.style.animationDuration = Math.max(duration, 300) + 'ms';
+            
+            // 高压力时颜色变化
+            if (pressure > 300) {
+                const hue = Math.max(0, 60 - (pressure - 300) / 10); // 从黄色到红色
+                wave.style.borderColor = `hsl(${hue}, 100%, 50%)`;
+                wave.style.boxShadow = `0 0 8px hsl(${hue}, 100%, 50%)`;
+            }
             
             // 添加到DOM
             effectsContainer.appendChild(wave);
@@ -1091,7 +1563,7 @@
         
         // 创建霓虹粒子特效
         function createNeonParticle(pressure) {
-            if (!gameState.effectsEnabled || !gameState.customEffectsUnlocked.includes('neon-explosion')) return;
+            if (!gameState.effectsEnabled || !gameState.customEffectsUnlocked.includes('neon-explosion') || !gameState.dynamicEffectsEnabled) return;
             
             const particle = document.createElement('div');
             particle.className = 'neonParticle';
@@ -1144,7 +1616,7 @@
         
         // 创建文字漂浮特效
         function createTextEffect(pressure) {
-            if (!gameState.effectsEnabled || !gameState.customEffectsUnlocked.includes('text-shower')) return;
+            if (!gameState.effectsEnabled || !gameState.customEffectsUnlocked.includes('text-shower') || !gameState.dynamicEffectsEnabled) return;
             
             const textEffect = document.createElement('div');
             textEffect.className = 'textEffect';
@@ -1177,7 +1649,9 @@
                 '✨放松✨', '治愈中...', '压力-100', '舒适+1',
                 pressure > 300 ? '太厉害了!' : '加油!',
                 pressure > 500 ? '尖叫之王!' : '继续尖叫!',
-                '✨✨✨'
+                pressure > 1000 ? '压力爆表!' : '✨✨✨',
+                pressure > 1500 ? '简直疯狂!' : '⚡⚡⚡',
+                pressure > 2000 ? '超越极限!' : '💥💥💥'
             ];
             
             textEffect.textContent = texts[Math.floor(Math.random() * texts.length)];
@@ -1192,7 +1666,7 @@
         
         // 创建冲击波特效
         function createShockwave(pressure) {
-            if (!gameState.effectsEnabled || !gameState.customEffectsUnlocked.includes('shockwave')) return;
+            if (!gameState.effectsEnabled || !gameState.customEffectsUnlocked.includes('shockwave') || !gameState.dynamicEffectsEnabled) return;
             
             const shockwave = document.createElement('div');
             shockwave.className = 'shockwave';
@@ -1209,6 +1683,12 @@
             shockwave.style.width = maxRadius + 'px';
             shockwave.style.height = maxRadius + 'px';
             
+            // 高压力时增加颜色效果
+            if (pressure > 1000) {
+                const hue = Math.floor(Math.random() * 360);
+                shockwave.style.background = `radial-gradient(circle, hsla(${hue}, 100%, 70%, 0.8) 0%, rgba(255, 255, 255, 0) 70%)`;
+            }
+            
             effectsContainer.appendChild(shockwave);
             
             // 使用CSS动画，不需要添加到数组
@@ -1219,15 +1699,15 @@
         
         // 创建表情符号爆炸
         function createEmojiExplosion(pressure) {
-            if (!gameState.effectsEnabled) return;
+            if (!gameState.effectsEnabled || !gameState.dynamicEffectsEnabled) return;
             
             // 基于压力决定表情数量
-            const count = Math.min(Math.floor(pressure / 50) + 3, 15);
+            const count = Math.min(Math.floor(pressure / 50) + 3, 20);
             
             const emojis = [
                 '😱', '😲', '😮', '😯', '😫', '😖', '😵', 
                 '💥', '⚡', '💢', '💫', '✨', '💦', '🌟',
-                '🔥', '⭐', '💯', '🎉', '🎊', '💨'
+                '🔥', '⭐', '💯', '🎉', '🎊', '💨', '💣', '🌋'
             ];
             
             for (let i = 0; i < count; i++) {
@@ -1241,7 +1721,7 @@
                 const centerX = window.innerWidth / 2;
                 const centerY = window.innerHeight / 2;
                 const angle = Math.random() * Math.PI * 2;
-                const distance = 40 + Math.random() * 100;
+                const distance = 40 + Math.random() * (pressure / 5);
                 
                 const posX = centerX + Math.cos(angle) * distance;
                 const posY = centerY + Math.sin(angle) * distance;
@@ -1249,8 +1729,8 @@
                 emoji.style.left = posX + 'px';
                 emoji.style.top = posY + 'px';
                 
-                // 随机大小
-                const size = 100 + Math.random() * 100;
+                // 随机大小（压力越大，表情可能越大）
+                const size = 100 + Math.random() * (100 + pressure / 10);
                 emoji.style.fontSize = `${size}%`;
                 
                 // 随机动画延迟
@@ -1266,9 +1746,9 @@
         }
         
         function applyScreenShake(pressure) {
-            if (!gameState.effectsEnabled || pressure < 40) return;
+            if (!gameState.effectsEnabled || pressure < 40 || !gameState.dynamicEffectsEnabled) return;
             
-            const intensity = pressure / 10;
+            const intensity = Math.min(pressure / 10, 30); // 限制最大抖动幅度
             const gameContainer = document.getElementById('gameContainer');
             
             // 清除现有的抖动
@@ -1377,13 +1857,25 @@
                 }
             }
             
-            // 更新背景颜色动画（如果启用）
-            if (gameState.backgroundAnimationActive && gameState.currentPressure > 300) {
-                if (Math.random() < 0.05) { // 随机改变背景颜色
-                    const body = document.body;
-                    body.style.animation = 'none';
-                    void body.offsetWidth; // 触发回流
-                    body.style.animation = 'bgColorShift 3s infinite';
+            // 更新星星
+            for (let i = gameState.stars.length - 1; i >= 0; i--) {
+                const star = gameState.stars[i];
+                star.elapsed += deltaTime;
+                
+                if (star.elapsed >= star.duration) {
+                    star.element.remove();
+                    gameState.stars.splice(i, 1);
+                }
+            }
+            
+            // 更新闪电
+            for (let i = gameState.lightnings.length - 1; i >= 0; i--) {
+                const lightning = gameState.lightnings[i];
+                lightning.elapsed += deltaTime;
+                
+                if (lightning.elapsed >= lightning.duration) {
+                    lightning.element.remove();
+                    gameState.lightnings.splice(i, 1);
                 }
             }
         }
@@ -1397,6 +1889,9 @@
             gameState.pressStartTime = Date.now();
             gameState.currentPressure = 0;
             gameState.lastPressureUpdate = Date.now();
+            
+            // 触发按钮波纹效果
+            triggerButtonRipple();
             
             // 处理快速按压检测
             if (gameState.rapidPressTimeout) {
@@ -1449,9 +1944,15 @@
                     gameState.touchType = 'long';
                     
                     // 根据最终压力重置嘴巴
-                    if (gameState.currentPressure > 80) {
+                    if (gameState.currentPressure > 2000) {
+                        mouthButton.textContent = '🤯';
+                    } else if (gameState.currentPressure > 1000) {
+                        mouthButton.textContent = '😵';
+                    } else if (gameState.currentPressure > 500) {
                         mouthButton.textContent = '😱';
-                    } else if (gameState.currentPressure > 40) {
+                    } else if (gameState.currentPressure > 200) {
+                        mouthButton.textContent = '😫';
+                    } else if (gameState.currentPressure > 80) {
                         mouthButton.textContent = '😲';
                     } else {
                         mouthButton.textContent = '😮';
@@ -1468,6 +1969,35 @@
                 gameState.touchType = '';
                 gameState.currentPressure = 0;
                 updatePressureDisplay();
+                
+                // 重置按钮形状
+                if (gameState.customEffectsUnlocked.includes('button-morph')) {
+                    mouthButton.style.borderRadius = '50%';
+                    mouthButton.style.clipPath = 'none';
+                }
+                
+                // 重置背景
+                if (gameState.backgroundAnimationActive) {
+                    document.body.style.background = 'linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%)';
+                    dynamicBackground.style.opacity = '0';
+                    dynamicBackground.style.animation = 'none';
+                }
+                
+                // 重置波浪动画
+                if (gameState.waveAnimationActive) {
+                    waveContainer.style.opacity = '0';
+                    gameState.waveAnimationActive = false;
+                }
+                
+                // 停止星星生成
+                if (gameState.starCreationInterval) {
+                    clearInterval(gameState.starCreationInterval);
+                    gameState.starCreationInterval = null;
+                }
+                
+                // 清除标题颜色
+                gameHeader.style.color = '#333';
+                gameHeader.style.textShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
             }, 1000);
         }
         
@@ -1495,7 +2025,9 @@
                 '感觉好些了吗？',
                 '压力已释放！',
                 '尖叫真痛快！',
-                '很好的释放！'
+                '很好的释放！',
+                finalPressure > 1000 ? '太厉害了！压力爆表！' : '尖叫技巧不错！',
+                finalPressure > 2000 ? '简直不可思议！超越极限！' : '释放得很彻底！'
             ];
             
             const randomMessage = messages[Math.floor(Math.random() * messages.length)];
@@ -1523,10 +2055,10 @@
                         createParticle(finalPressure);
                     }
                 } else {
-                    // 长按效果：基于压力
+// 长按效果：基于压力
                     const scaleFactor = isSuper ? 1.5 : 1;
                     const baseCount = Math.floor((finalPressure / (isSuper ? 15 : 20)) + 5);
-                    const particleCount = Math.min(baseCount, 100); // 限制最大数量避免性能问题
+                    const particleCount = Math.min(baseCount, 150); // 限制最大数量避免性能问题
                     
                     // 主爆发效果
                     for (let i = 0; i < particleCount; i++) {
@@ -1584,15 +2116,67 @@
                             }
                         }
                         
-                        // 临时激活背景颜色变化
-                        if (gameState.customEffectsUnlocked.includes('color-shift')) {
-                            gameState.backgroundAnimationActive = true;
-                            document.body.style.animation = 'bgColorShift 3s infinite';
-                            
+                        // 临时激活按钮形变动画
+                        if (gameState.customEffectsUnlocked.includes('button-morph')) {
+                            triggerButtonMorphAnimation();
+                        }
+                    }
+                    
+                    // 极限压力特效 (1000+)
+                    if (finalPressure > 1000) {
+                        // 创建闪电效果
+                        if (gameState.customEffectsUnlocked.includes('lightning')) {
+                            for (let i = 0; i < 5; i++) {
+                                setTimeout(() => {
+                                    createLightning(finalPressure);
+                                }, i * 200);
+                            }
+                        }
+                        
+                        // 超大规模粒子爆发
+                        for (let i = 0; i < 3; i++) {
                             setTimeout(() => {
-                                gameState.backgroundAnimationActive = false;
-                                document.body.style.animation = 'none';
-                            }, 5000);
+                                const burstSize = Math.min(Math.floor(finalPressure / 50), 50);
+                                for (let j = 0; j < burstSize; j++) {
+                                    createParticle(finalPressure * 0.8);
+                                }
+                                createEmojiExplosion(finalPressure);
+                                applyScreenShake(finalPressure * 0.7);
+                            }, i * 500);
+                        }
+                    }
+                    
+                    // 超级极限压力特效 (2000+)
+                    if (finalPressure > 2000) {
+                        // 疯狂多重爆发
+                        for (let i = 0; i < 8; i++) {
+                            setTimeout(() => {
+                                // 全屏闪烁效果
+                                document.body.style.backgroundColor = `rgba(255, ${Math.random() * 255}, ${Math.random() * 255}, 0.1)`;
+                                setTimeout(() => {
+                                    document.body.style.backgroundColor = '';
+                                }, 100);
+                                
+                                // 多重冲击波
+                                if (gameState.customEffectsUnlocked.includes('shockwave')) {
+                                    createShockwave(finalPressure);
+                                }
+                                
+                                // 爆炸效果
+                                createEmojiExplosion(finalPressure);
+                                
+                                // 重型屏幕震动
+                                applyScreenShake(finalPressure * 0.3);
+                                
+                                // 闪电风暴
+                                if (gameState.customEffectsUnlocked.includes('lightning')) {
+                                    for (let j = 0; j < 3; j++) {
+                                        setTimeout(() => {
+                                            createLightning(finalPressure);
+                                        }, j * 100);
+                                    }
+                                }
+                            }, i * 300);
                         }
                     }
                 }
@@ -1624,6 +2208,12 @@
                         toggleSuperMode(true);
                     }
                     
+                    // 如果是形变大师成就，激活形变效果
+                    if (achievement.id === 'morph-master' && !gameState.customEffectsUnlocked.includes('button-morph')) {
+                        gameState.customEffectsUnlocked.push('button-morph');
+                        saveCustomEffects();
+                    }
+                    
                     // 显示成就通知
                     showAchievement(achievement.title, achievement.description);
                     
@@ -1648,6 +2238,23 @@
                     
                     // 保存效果状态
                     saveCustomEffects();
+                    
+                    // 如果解锁了背景波浪，立即激活一次
+                    if (effect.id === 'wave-background') {
+                        waveContainer.style.opacity = '1';
+                        gameState.waveAnimationActive = true;
+                        setTimeout(() => {
+                            waveContainer.style.opacity = '0';
+                            gameState.waveAnimationActive = false;
+                        }, 3000);
+                    }
+                    
+                    // 如果解锁了按钮形变，立即展示一次
+                    if (effect.id === 'button-morph') {
+                        setTimeout(() => {
+                            triggerButtonMorphAnimation();
+                        }, 500);
+                    }
                 }
             }
         }
@@ -1755,6 +2362,23 @@
                 
                 // 显示提示
                 showPopupMessage('超级模式已激活！释放压力效果增强！', 2000);
+                
+                // 特效展示
+                setTimeout(() => {
+                    for (let i = 0; i < 10; i++) {
+                        setTimeout(() => {
+                            createParticle(300);
+                        }, i * 100);
+                    }
+                    
+                    if (gameState.customEffectsUnlocked.includes('neon-explosion')) {
+                        for (let i = 0; i < 15; i++) {
+                            setTimeout(() => {
+                                createNeonParticle(300);
+                            }, i * 80);
+                        }
+                    }
+                }, 500);
             } else {
                 if (indicator) {
                     indicator.remove();
@@ -1787,15 +2411,15 @@
             // 根据压力更新按钮外观
             if (gameState.isPressed) {
                 if (gameState.touchType !== 'rapid') {
-                    if (gameState.currentPressure > 500) {
+                    if (gameState.currentPressure > 2000) {
                         mouthButton.textContent = '🤯';
-                    } else if (gameState.currentPressure > 300) {
+                    } else if (gameState.currentPressure > 1000) {
                         mouthButton.textContent = '😵';
-                    } else if (gameState.currentPressure > 150) {
+                    } else if (gameState.currentPressure > 500) {
                         mouthButton.textContent = '😱';
-                    } else if (gameState.currentPressure > 80) {
+                    } else if (gameState.currentPressure > 200) {
                         mouthButton.textContent = '😫';
-                    } else if (gameState.currentPressure > 40) {
+                    } else if (gameState.currentPressure > 80) {
                         mouthButton.textContent = '😲';
                     } else if (gameState.currentPressure > 20) {
                         mouthButton.textContent = '😯';
@@ -1823,6 +2447,24 @@
                                                    inset 0 -2px 5px rgba(0, 0, 0, 0.1),
                                                    inset 0 2px 5px rgba(255, 255, 255, 0.5),
                                                    0 0 ${intensity}px ${intensity/2}px rgba(255, 50, 50, 0.8)`;
+                }
+                
+                // 按钮形变
+                if (gameState.currentPressure > 50 && gameState.customEffectsUnlocked.includes('button-morph')) {
+                    updateButtonShape(gameState.currentPressure);
+                }
+                
+                // 背景颜色更新
+                updateBackgroundColor(gameState.currentPressure);
+                
+                // 星星背景
+                createStarField();
+                
+                // 高压随机闪电
+                if (gameState.currentPressure > 900 && gameState.customEffectsUnlocked.includes('lightning')) {
+                    if (Math.random() < 0.01) {
+                        createLightning(gameState.currentPressure);
+                    }
                 }
             } else {
                 mouthButton.style.transform = 'scale(1)';
@@ -1908,8 +2550,13 @@
             // 继续循环
             gameState.animationFrameId = requestAnimationFrame(gameLoop);
             
-            // 如果没有活动，停止循环
-            if (!gameState.isPressed && gameState.particles.length === 0 && gameState.soundWaves.length === 0 && gameState.neonParticles.length === 0) {
+            // 如果没有活动且没有动画特效，停止循环
+            if (!gameState.isPressed && 
+                gameState.particles.length === 0 && 
+                gameState.soundWaves.length === 0 && 
+                gameState.neonParticles.length === 0 && 
+                gameState.stars.length === 0 && 
+                gameState.lightnings.length === 0) {
                 cancelAnimationFrame(gameState.animationFrameId);
                 gameState.animationFrameId = null;
             }
@@ -1937,18 +2584,44 @@
                 gameState.neonParticles = [];
                 gameState.textEffects = [];
                 gameState.shockwaves = [];
+                gameState.stars = [];
+                gameState.lightnings = [];
                 
                 // 关闭背景动画
                 if (gameState.backgroundAnimationActive) {
-                    document.body.style.animation = 'none';
+                    document.body.style.background = 'linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%)';
+                    dynamicBackground.style.opacity = '0';
+                    dynamicBackground.style.animation = 'none';
                     gameState.backgroundAnimationActive = false;
                 }
+                
+                // 关闭动态效果
+                gameState.dynamicEffectsEnabled = false;
+                
+                // 重置波浪
+                waveContainer.style.opacity = '0';
+                gameState.waveAnimationActive = false;
+                
+                // 重置按钮形状
+                mouthButton.style.borderRadius = '50%';
+                mouthButton.style.clipPath = 'none';
+                
+                // 停止星星生成
+                if (gameState.starCreationInterval) {
+                    clearInterval(gameState.starCreationInterval);
+                    gameState.starCreationInterval = null;
+                }
+            } else {
+                // 重新启用动态效果
+                gameState.dynamicEffectsEnabled = true;
             }
         }
         
         function toggleSoundEnabled() {
             gameState.soundEnabled = !gameState.soundEnabled;
             toggleSound.textContent = gameState.soundEnabled ? '🔊' : '🔇';
+            
+            // 将来可以实现实际的声音效果
         }
         
         // 初始化功能
@@ -1975,6 +2648,19 @@
             // 显示欢迎消息
             setTimeout(() => {
                 showPopupMessage('欢迎使用尖叫爆发器Plus版！', 2000);
+                
+                // 初始特效展示
+                setTimeout(() => {
+                    for (let i = 0; i < 5; i++) {
+                        setTimeout(() => {
+                            createParticle(50);
+                        }, i * 100);
+                    }
+                    
+                    // 按钮波纹效果
+                    triggerButtonRipple();
+                    
+                }, 500);
             }, 500);
         }
         
